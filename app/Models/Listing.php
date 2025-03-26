@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Listing extends Model
 {
+    use HasFactory;
     protected $table = 'listings';
 
     protected $fillable = [
         'title',
         'description',
-        'consignor',
         'user_id',
         'estimate',
         'sale_order',

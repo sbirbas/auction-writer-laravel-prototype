@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Listing;
 
 class ListingSeeder extends Seeder
 {
@@ -12,6 +12,8 @@ class ListingSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // Generate 10 fake listings
+        Listing::factory()->count(10)->create();
     }
 }
+

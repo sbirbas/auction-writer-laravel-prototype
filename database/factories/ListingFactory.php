@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ListingFactory extends Factory
 {
-    protected $model=Listing::class()
     /**
      * Define the model's default state.
      *
@@ -19,11 +18,11 @@ class ListingFactory extends Factory
     public function definition(): array
     {
         return [
-        'title' => fake()->title;
-        'description' fake()->title;
-        'consignor' fake()->title;
-        'estimate' fake()->title;
-        'sale_order' fake()->title;
+            'title' => fake()->sentence(4),
+            'description' => fake()->paragraph(),
+            'user_id' => 1,
+            'estimate' => fake()->randomFloat(2),
+            'sale_order' => fake()->randomNumber(5),
         ];
     }
 }
