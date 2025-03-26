@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ListingsIndexController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('listings', [ListingsIndexController::class, 'index'])->name('manage-listings');
+    Route::resource('posts', ListingController::class);
 });
 
 require __DIR__.'/settings.php';

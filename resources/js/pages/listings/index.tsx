@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { CreateListingModal } from '@/components/create';
+import CreateListingModal from '@/components/create';
 import { ListingDropdown } from '@/components/listing-dropdown';
 import { usePage } from '@inertiajs/react';
 import {
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Listing {
+interface listing {
     id: number;
     title: string;
     user_id: number;
@@ -29,7 +29,6 @@ interface Listing {
     estimate: number;
     sale_order: number;
 }
-
 
 export default function ListingIndex({ }) {
     const { listings } = usePage().props;

@@ -7,6 +7,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { DeleteListing } from "@/pages/listings/delete";
+import { EditListing } from "@/pages/listings/edit";
+
 
 
 export function ListingDropdown() {
@@ -14,10 +17,10 @@ export function ListingDropdown() {
         <DropdownMenu>
             <DropdownMenuTrigger><Button>Actions</Button></DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}><EditListing></EditListing></DropdownMenuItem>
                 <DropdownMenuItem>Duplicate</DropdownMenuItem>
                 <DropdownMenuSeparator></DropdownMenuSeparator>
-                <DropdownMenuItem>Delete</DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}><DeleteListing></DeleteListing></DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
