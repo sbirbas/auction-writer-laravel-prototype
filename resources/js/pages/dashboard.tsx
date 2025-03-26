@@ -1,4 +1,5 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Accordion } from '@radix-ui/react-accordion';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';

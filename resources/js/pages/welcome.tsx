@@ -1,5 +1,6 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { Accordion } from '@/components/ui/accordion';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -40,8 +41,9 @@ export default function Welcome() {
                 </header>
                 <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
                     <main className="flex w-full max-w-[335px] flex-col-reverse lg:max-w-4xl lg:flex-row">
+                   <h1>Supercharge your Auction Cataloging with AI</h1>
 
-                    </main>
+<p>Say goodbye to tedious manual cataloging with our advanced AI software. Designed exclusively for Auctioneers</p>                    </main>
                 </div>
                 <div className="hidden h-14.5 lg:block"></div>
             </div>
