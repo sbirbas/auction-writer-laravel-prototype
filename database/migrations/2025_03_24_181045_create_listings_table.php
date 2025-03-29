@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('estimate');
             $table->string('image')->nullable();
             $table->string('sale_order');
+            $table->timestamps();
         });
     }
 

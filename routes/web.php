@@ -16,9 +16,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('listings', [ListingsIndexController::class, 'index'])->name('manage-listings');
-    Route::resource('posts', ListingController::class);
+    Route::prefix('listings')->name('listings.')->group(function () {
+        Route::get('/', [ListingsIndexController::class, 'index'])->name('index');
+        Route::get('/create', [ListingsIndexController::class, 'create']);
+        Route::get('/{listing}/edit', [ListingsIndexController::class, 'edit']);
+        Route::get('/delete', [ListingsIndexController::class, 'delete']);
+    });
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+// CRUD Actions for Listings
+Route::resource('listing', ListingController::class)->only(['store', 'update', 'destroy']);
+
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
