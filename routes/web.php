@@ -27,5 +27,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // CRUD Actions for Listings
 Route::resource('listing', ListingController::class)->only(['store', 'update', 'destroy']);
 
+Route::post('/listing}', [ListingController::class, 'duplicate'])->name('listing.duplicate');
+Route::post('/listing/duplicate-multiple', action: [ListingController::class, 'duplicateMultiple'])->name('listing.duplicateMultiple');
+Route::post('/listing/reorder', [ListingController::class, 'reorder'])->name('listing.reorder');
+Route::delete('/listing/delete-multiple', [ListingController::class, 'deleteMultiple']);
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

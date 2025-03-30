@@ -1,9 +1,11 @@
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import { ListingDropdown } from '@/components/listing-dropdown';
-import { usePage } from '@inertiajs/react';
-import { CreateListing } from './create';
+import AppLayout from "@/layouts/app-layout";
+import { Head, usePage } from "@inertiajs/react";
+import { CreateListing } from "./create";
+import { DeleteListing } from "./delete";
+import { DuplicateListings } from "./duplicate-multiple";
+import { DeleteMultiple } from "./delete-multiple";
+import { Button } from "@/components/ui/button";
+import { ListingDropdown } from "@/components/listing-dropdown";
 import {
     Table,
     TableBody,
@@ -12,68 +14,89 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
+import React, { useState } from "react";
 
-import { Checkbox } from "@/components/ui/checkbox"
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Listings',
-        href: '/listings',
-    },
-];
-
-interface listing {
-    id: number;
-    title: string;
-    user_id: number;
-    description: string;
-    estimate: number;
-    sale_order: number;
-}
-
-export default function ListingIndex({ }) {
+export default function ListingIndex() {
     const { listings } = usePage().props;
-    const estimatedTotal = listings.reduce((totalValue, listing) => totalValue + parseFloat(listing.estimate), 0);
+    const estimatedTotal = listings.reduce((total, listing) => total + parseFloat(listing.estimate), 0);
     const recordCount = listings.length;
+
+    const [selectedListings, setSelectedListings] = useState<number[]>([]);
+
+    const toggleSelection = (listingId: number) => {
+        setSelectedListings((prevSelected) =>
+            prevSelected.includes(listingId)
+                ? prevSelected.filter((id) => id !== listingId)
+                : [...prevSelected, listingId]
+        );
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedListings.length === listings.length) {
+            setSelectedListings([]);
+        } else {
+            setSelectedListings(listings.map((listing) => listing.id));
+        }
+    };
+
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={[{ title: "Listings", href: "/listings" }]}>
             <Head title="Dashboard" />
-            <h1> Welcome</h1>
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <h1>Welcome</h1>
+
+            <div className="flex flex-col gap-4 p-4">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    <div className="max-h-[150px] p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Total Lots: {recordCount}</h2>
-                        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mt-2">Total Estimated Value: ${estimatedTotal}</h2>
+                    <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
+                        <h2 className="text-xl font-semibold">Total Lots: {recordCount}</h2>
+                        <h2 className="text-xl font-semibold mt-2">Total Estimated Value: ${estimatedTotal}</h2>
                         <div className="mt-4">
                             <CreateListing />
+                            <DeleteMultiple selectedListings={selectedListings} />
+                            <DuplicateListings selectedListings={selectedListings} />
                         </div>
                     </div>
                 </div>
 
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
+                <div className="border rounded-xl overflow-hidden">
                     <Table>
-                        <TableCaption>A list of your recent invoices.</TableCaption>
+                        <TableCaption>A list of your recent listings.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableCell className=""><Checkbox
-                                ></Checkbox></TableCell>
+                                <TableCell>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedListings.length === listings.length}
+                                        onChange={toggleSelectAll}
+                                    />
+                                </TableCell>
                                 <TableHead className="text-center">Sale Order</TableHead>
-                                <TableHead className="text-center">#</TableHead>
-                                <TableHead className="text-center">Title</TableHead>
+                                <TableHead className="text-center">Lot #</TableHead>
+                                <TableHead className="text-center w-[200px]">Title</TableHead>
                                 <TableHead className="text-center w-[200px]">Description</TableHead>
                                 <TableHead className="text-center">Estimate</TableHead>
+                                <TableHead className="text-center">Consignor</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {listings.map((listing) => (
                                 <TableRow key={listing.id}>
-                                    <TableCell className=""><Checkbox></Checkbox></TableCell>
-                                    <TableCell className="text-center">{listing.sale_order}</TableCell>
+                                    <TableCell>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedListings.includes(listing.id)}
+                                            onChange={() => toggleSelection(listing.id)}
+                                        />
+                                    </TableCell>
                                     <TableCell className="text-center">{listing.id}</TableCell>
-                                    <TableCell className="text-center">{listing.title}</TableCell>
-                                    <TableCell className="text-center w-[200px] max-w-[200px] truncate">{listing.description}</TableCell>
+                                    <TableCell className="text-center">{listing.lot}</TableCell>
+                                    <TableCell className="text-center w-[200px] truncate">{listing.title}</TableCell>
+                                    <TableCell className="text-center w-[200px] truncate">{listing.description}</TableCell>
                                     <TableCell className="text-center">${listing.estimate}</TableCell>
-                                    <TableCell className="text-center"><ListingDropdown data={listing}></ListingDropdown></TableCell>
+                                    <TableCell className="text-center">${listing.consignor}</TableCell>
+                                    <TableCell className="text-center">
+                                    <ListingDropdown data={listing} />
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -22,6 +22,7 @@ export function DeleteListing({ data }) {
             return;
         }
         destroy(`/listing/${data.id}`);
+        toast('Listing Deleted');
     }
 
     return (

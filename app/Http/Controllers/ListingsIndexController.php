@@ -8,6 +8,7 @@ use Inertia\Inertia;
 
 class ListingsIndexController extends Controller
 {
+    //this is just for passing the listing model to all the views.
     protected function getUserListings()
     {
         $user = auth()->user();
@@ -30,6 +31,10 @@ class ListingsIndexController extends Controller
     public function edit()
     {
         return Inertia::render('listings/edit', $this->getUserListings());
+    }
+    public function duplicate()
+    {
+        return Inertia::render('listings/duplicate', $this->getUserListings());
     }
 
     public function delete()

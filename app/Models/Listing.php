@@ -11,11 +11,12 @@ class Listing extends Model
     protected $table = 'listings';
 
     protected $fillable = [
+        'lot',
         'title',
         'description',
         'user_id',
         'estimate',
-        'sale_order',
+        'consignor'
     ];
 
     public function user()
