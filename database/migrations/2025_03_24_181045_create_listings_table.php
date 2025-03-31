@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
+            $table->integer('position')->after('id')->nullable();
             $table->string('lot');
             $table->string('title');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

@@ -7,9 +7,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteListing } from "@/pages/listings/delete";
-import { EditListing } from "@/pages/listings/edit";
-import { DuplicateListings } from "@/pages/listings/duplicate-multiple";
+import { DeleteListing } from "@/pages/listings/methods/delete";
+import { EditListing } from "@/pages/listings/methods/edit";
+import { DuplicateListings } from "@/pages/listings/methods/duplicate-multiple";
 
 export function ListingDropdown({data}) {
     return (

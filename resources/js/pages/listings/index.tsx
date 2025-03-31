@@ -1,11 +1,9 @@
 import AppLayout from "@/layouts/app-layout";
 import { Head, usePage } from "@inertiajs/react";
-import { CreateListing } from "./create";
-import { DeleteListing } from "./delete";
-import { DuplicateListings } from "./duplicate-multiple";
-import { DeleteMultiple } from "./delete-multiple";
-import { Button } from "@/components/ui/button";
-import { ListingDropdown } from "@/components/listing-dropdown";
+import { CreateListing } from "./methods/create";
+import { DuplicateListings } from "./methods/duplicate-multiple";
+import { DeleteMultiple } from "./methods/delete-multiple";
+import { router } from "@inertiajs/react";
 import {
     Table,
     TableBody,
@@ -16,6 +14,19 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import React, { useState } from "react";
+import {
+    DndContext,
+    closestCenter,
+    useSensor,
+    useSensors,
+    PointerSensor,
+} from "@dnd-kit/core";
+import {
+    SortableContext,
+    verticalListSortingStrategy,
+    arrayMove,
+} from "@dnd-kit/sortable";
+import SortableRow from "./sortable-row";
 
 export default function ListingIndex() {
     const { listings } = usePage().props;
@@ -23,6 +34,15 @@ export default function ListingIndex() {
     const recordCount = listings.length;
 
     const [selectedListings, setSelectedListings] = useState<number[]>([]);
+    const [items, setItems] = useState(listings);
+
+    const toggleSelectAll = () => {
+        if (selectedListings.length === listings.length) {
+            setSelectedListings([]);
+        } else {
+            setSelectedListings(listings.map((listing) => listing.id));
+        }
+    };
 
     const toggleSelection = (listingId: number) => {
         setSelectedListings((prevSelected) =>
@@ -32,12 +52,33 @@ export default function ListingIndex() {
         );
     };
 
-    const toggleSelectAll = () => {
-        if (selectedListings.length === listings.length) {
-            setSelectedListings([]);
-        } else {
-            setSelectedListings(listings.map((listing) => listing.id));
-        }
+    const sensors = useSensors(useSensor(PointerSensor));
+
+    const handleDragEnd = (event: any) => {
+        const { active, over } = event;
+        if (!over || active.id === over.id) return;
+
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        if (oldIndex === -1 || newIndex === -1) return;
+
+        const newItems = arrayMove([...items], oldIndex, newIndex);
+        setItems(newItems);
+
+        const reorderedItems = newItems.map((item, index) => ({
+            id: item.id,
+            position: index,
+        }));
+        router.post("/listing/reorder", { items: newItems })
+        .then(response => {
+            console.log(response); // Check the response
+        })
+        .catch((error) => {
+            console.error("Reorder failed", error);
+            // If a redirect is happening, check the URL in error
+        });
+
     };
 
     return (
@@ -59,48 +100,43 @@ export default function ListingIndex() {
                 </div>
 
                 <div className="border rounded-xl overflow-hidden">
-                    <Table>
-                        <TableCaption>A list of your recent listings.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableCell>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedListings.length === listings.length}
-                                        onChange={toggleSelectAll}
-                                    />
-                                </TableCell>
-                                <TableHead className="text-center">Sale Order</TableHead>
-                                <TableHead className="text-center">Lot #</TableHead>
-                                <TableHead className="text-center w-[200px]">Title</TableHead>
-                                <TableHead className="text-center w-[200px]">Description</TableHead>
-                                <TableHead className="text-center">Estimate</TableHead>
-                                <TableHead className="text-center">Consignor</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {listings.map((listing) => (
-                                <TableRow key={listing.id}>
-                                    <TableCell>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedListings.includes(listing.id)}
-                                            onChange={() => toggleSelection(listing.id)}
+                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                        <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+                            <Table className="max-w-[1000px] w-full mx-auto">
+                                <TableCaption>A list of your recent listings.</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead></TableHead>
+                                        <TableHead>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedListings.length === listings.length}
+                                                onChange={toggleSelectAll}
+                                            />
+                                        </TableHead>
+                                        <TableHead className="text-center">Sale Order</TableHead>
+                                        <TableHead className="text-center">Lot #</TableHead>
+                                        <TableHead className="text-center w-[auto] sm:w-[150px] md:w-[200px]">Title</TableHead>
+                                        <TableHead className="text-center w-[auto] sm:w-[150px] md:w-[250px]">Description</TableHead>
+                                        <TableHead className="text-center">Estimate</TableHead>
+                                        <TableHead className="text-center">Consignor</TableHead>
+                                        <TableHead className="text-center">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {items.map((listing) => (
+                                        <SortableRow
+                                            key={listing.id}
+                                            item={listing}
+                                            selectedListings={selectedListings}
+                                            toggleSelection={toggleSelection}
                                         />
-                                    </TableCell>
-                                    <TableCell className="text-center">{listing.id}</TableCell>
-                                    <TableCell className="text-center">{listing.lot}</TableCell>
-                                    <TableCell className="text-center w-[200px] truncate">{listing.title}</TableCell>
-                                    <TableCell className="text-center w-[200px] truncate">{listing.description}</TableCell>
-                                    <TableCell className="text-center">${listing.estimate}</TableCell>
-                                    <TableCell className="text-center">{listing.consignor}</TableCell>
-                                    <TableCell className="text-center">
-                                    <ListingDropdown data={listing} />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                                    ))}
+                                </TableBody>
+                            </Table>
+
+                        </SortableContext>
+                    </DndContext>
                 </div>
             </div>
         </AppLayout>

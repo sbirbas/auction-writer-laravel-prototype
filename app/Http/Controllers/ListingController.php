@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Listing;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class ListingController extends Controller
 {
@@ -34,6 +35,8 @@ class ListingController extends Controller
             'consignor' => 'required|integer',
         ]);
 
+        $listing->updated_at = Carbon::now();
+
         $listing->update($validatedData);
     }
 
@@ -52,7 +55,7 @@ class ListingController extends Controller
 
         foreach ($listingIds as $id) {
             $originalListing = Listing::findOrFail($id);
-
+            //duplicating with the eloquent replicate() method
             $newListing = $originalListing->replicate();
             $newListing->created_at = Carbon::now();
 
@@ -60,12 +63,18 @@ class ListingController extends Controller
         }
     }
 
-
     public function reorder(Request $request)
     {
-        foreach ($request->listings as $index => $listing) {
-            Listing::where('id', $listing['id'])->update(['sort_order' => $index + 1]);
-        }
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|integer',
+        ]);
+
+        FacadesDB::transaction(function () use ($request) {
+            foreach ($request->items as $index => $item) {
+                Listing::where('id', $item['id'])->update(['position' => $index]);
+            }
+        });
     }
 
     public function destroy(Listing $listing)

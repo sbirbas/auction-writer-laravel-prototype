@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from "sonner";
 
 export function CreateListing() {
   const [values, setValues] = useState({

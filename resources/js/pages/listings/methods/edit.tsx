@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface EditListingProps {
   listing: {
@@ -28,9 +29,12 @@ interface EditListingProps {
 export function EditListing({ listing }: EditListingProps) {
   const [values, setValues] = useState(listing);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [saving, setSaving] = useState(false);
+  const [originalValues, setOriginalValues] = useState(listing);
 
   useEffect(() => {
     setValues(listing);
+    setOriginalValues(listing);
   }, [listing]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -51,14 +55,24 @@ export function EditListing({ listing }: EditListingProps) {
     return newErrors;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const formErrors = validateForm();
     setErrors(formErrors);
 
     if (Object.keys(formErrors).length === 0) {
-      router.put(`/listing/${listing.id}`, values, {
-      });
+      setSaving(true); // Optimistic update(assuming request succeeds)
+      toast("Saving changes...");
+
+      try {
+        await router.put(`/listing/${listing.id}`, values);
+        toast.success("Listing updated successfully!");
+      } catch (error) {
+        toast.error("Error updating listing. Please try again.");
+        setValues(originalValues); // Revert UI if failure
+      } finally {
+        setSaving(false);
+      }
     }
   }
 
@@ -86,14 +100,15 @@ export function EditListing({ listing }: EditListingProps) {
                   value={values[field as keyof typeof values] || ""}
                   onChange={handleChange}
                   className="w-full"
+                  disabled={saving} //Disable while saving
                 />
                 {errors[field] && <span className="text-red-500 text-sm">{errors[field]}</span>}
               </div>
             </div>
           ))}
           <DialogFooter>
-            <Button type="submit" className="w-full sm:w-auto">
-              Save Changes
+            <Button type="submit" className="w-full sm:w-auto" disabled={saving}>
+              {saving ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
         </form>

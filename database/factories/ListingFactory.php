@@ -21,9 +21,9 @@ class ListingFactory extends Factory
             'title' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'user_id' => 1,
-            'image' => 'https://i.ebayimg.com/images/g/nhQAAOSw99tmRXnL/s-l1200.jpg',
+            'lot' => fake()->randomNumber(5),
             'estimate' => fake()->numberBetween(1,20),
-            'sale_order' => fake()->randomNumber(5),
+            'consignor' => fake()->randomNumber(5),
         ];
     }
 }

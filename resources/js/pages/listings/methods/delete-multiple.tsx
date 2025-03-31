@@ -21,7 +21,7 @@ export function DeleteMultiple({ selectedListings }: DeleteListingsProps) {
         <button
             onClick={deleteSelected}
             disabled={selectedListings.length === 0}
-            className="mt-2 p-2 bg-red-500 text-white rounded disabled:opacity-50"
+            className="mt-2 p-2 bg-red-500 text-white rounded"
         >
             Delete Selected
         </button>
