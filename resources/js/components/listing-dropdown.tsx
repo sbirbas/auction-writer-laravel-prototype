@@ -1,6 +1,4 @@
 import { Button } from "./ui/button";
-import { router } from "@inertiajs/react";
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,7 +16,7 @@ export function ListingDropdown({data}) {
         <DropdownMenu>
             <DropdownMenuTrigger><Button>...</Button></DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}><EditListing></EditListing></DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}><EditListing listing={data} /></DropdownMenuItem>
                 <DropdownMenuSeparator></DropdownMenuSeparator>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}><DuplicateListings selectedListings={[data.id]}/></DropdownMenuItem>
                 <DropdownMenuSeparator></DropdownMenuSeparator>

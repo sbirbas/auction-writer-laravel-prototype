@@ -93,7 +93,7 @@ export default function ListingIndex() {
                                     <TableCell className="text-center w-[200px] truncate">{listing.title}</TableCell>
                                     <TableCell className="text-center w-[200px] truncate">{listing.description}</TableCell>
                                     <TableCell className="text-center">${listing.estimate}</TableCell>
-                                    <TableCell className="text-center">${listing.consignor}</TableCell>
+                                    <TableCell className="text-center">{listing.consignor}</TableCell>
                                     <TableCell className="text-center">
                                     <ListingDropdown data={listing} />
                                     </TableCell>

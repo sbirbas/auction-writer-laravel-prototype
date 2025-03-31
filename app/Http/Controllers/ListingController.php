@@ -79,10 +79,11 @@ class ListingController extends Controller
 
     public function deleteMultiple(Request $request)
     {
-        $listingIds = $request->input('listingIds', []);
+        $listingIds = $request->input('listingIds');
 
         foreach ($listingIds as $id) {
-            $id->delete();
+            $selectedListing = Listing::findOrFail($id);
+            $selectedListing->delete();
         }
     }
 }

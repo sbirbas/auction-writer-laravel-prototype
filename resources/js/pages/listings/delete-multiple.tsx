@@ -11,13 +11,10 @@ export function DeleteMultiple({ selectedListings }: DeleteListingsProps) {
             return;
         }
 
-        router.delete("/listing/delete-multiple", {
-            data: {
-                listingIds: selectedListings,
-            },
-            onSuccess: () => alert("Listings deleted successfully."),
-            onError: (error) => alert("Failed to delete listings. Please try again."),
+        router.post("/listing/delete-multiple", {
+            listingIds: selectedListings,
         });
+
     };
 
     return (
