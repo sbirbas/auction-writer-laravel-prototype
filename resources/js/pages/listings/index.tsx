@@ -56,7 +56,8 @@ export default function ListingIndex() {
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
-
+//checks if the target is different from the dragged item, and find the new indices
+//and if they are valid, moves item
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
 
@@ -71,20 +72,13 @@ export default function ListingIndex() {
         }));
         router.post("/listing/reorder", { items: newItems })
             .then(response => {
-                console.log(response); // Check the response
+                console.log(response);
             })
-            .catch((error) => {
-                console.error("Reorder failed", error);
-                // If a redirect is happening, check the URL in error
-            });
-
     };
 
     return (
         <AppLayout breadcrumbs={[{ title: "Listings", href: "/listings" }]}>
             <Head title="Dashboard" />
-            <h1>Welcome</h1>
-
             <div className="flex flex-col gap-4 p-4">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
@@ -99,7 +93,6 @@ export default function ListingIndex() {
                             />
                             <DuplicateListings
                                 selectedListings={selectedListings}
-                                setSelectedListings={setSelectedListings}
                                 setItems={setItems}
                             />
                         </div>

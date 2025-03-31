@@ -4,10 +4,9 @@ import { useState } from "react";
 
 interface DuplicateListingsProps {
     selectedListings: number[];
-    setSelectedListings: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-export function DuplicateListings({ selectedListings, setSelectedListings }: DuplicateListingsProps) {
+export function DuplicateListings({ selectedListings }: DuplicateListingsProps) {
     // For optimistic updates, set the state to track duplicating listings
     const [duplicating, setDuplicating] = useState(false);
     const [duplicatingIds, setDuplicatingIds] = useState<number[]>([]); // Track the listings being duplicated
@@ -18,10 +17,9 @@ export function DuplicateListings({ selectedListings, setSelectedListings }: Dup
             return;
         }
 
-        // Optimistically update UI - remove listings being duplicated
         setDuplicating(true);
         setDuplicatingIds(selectedListings);
-        setSelectedListings([]);
+
         toast("Duplicating listings...");
 
         try {
@@ -29,21 +27,20 @@ export function DuplicateListings({ selectedListings, setSelectedListings }: Dup
                 listingIds: selectedListings,
             });
 
-            toast.success("Successfully duplicated lots!");
+            toast.success("Successfully duplicated lots!"); p
         } catch (error) {
             toast.error("Error duplicating listings. Please try again.");
             // Revert the UI if it fails
             setDuplicating(false);
             setDuplicatingIds([]);
-            setSelectedListings(selectedListings);
         }
     };
 
     return (
         <button
             onClick={duplicateSelected}
-            disabled={selectedListings.length === 0}
-            className="m-2 p-2 bg-red-500 text-white rounded disabled:opacity-50"
+            hidden={selectedListings.length === 0} // Disable the button while duplicating
+            className="m-2 p-2 bg-red-500 text-white rounded"
         >
             Duplicate
         </button>

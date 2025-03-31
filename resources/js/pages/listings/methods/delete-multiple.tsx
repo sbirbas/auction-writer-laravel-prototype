@@ -5,12 +5,12 @@ import { useState } from "react";
 interface DeleteListingsProps {
     selectedListings: number[];
     setSelectedListings: React.Dispatch<React.SetStateAction<number[]>>;
-    setItems: React.Dispatch<React.SetStateAction<any[]>>; // Added this to update the items state
+    setItems: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export function DeleteMultiple({ selectedListings, setSelectedListings, setItems }: DeleteListingsProps) {
-    const [deleting, setDeleting] = useState(false); // Track if deletion is in progress
-    const [deletingIds, setDeletingIds] = useState<number[]>([]); // Track the listings being deleted
+    const [deleting, setDeleting] = useState(false);
+    const [deletingIds, setDeletingIds] = useState<number[]>([]);
 
     const deleteSelected = async () => {
         if (selectedListings.length === 0) {
@@ -18,12 +18,10 @@ export function DeleteMultiple({ selectedListings, setSelectedListings, setItems
             return;
         }
 
-        // Optimistically update UI - remove listings being deleted
         setDeleting(true);
         setDeletingIds(selectedListings);
-        setSelectedListings([]); // Optionally clear the selected listings
+        setSelectedListings([]);
 
-        // Remove the listings from `items` optimistically
         setItems((prevItems) => prevItems.filter((item) => !selectedListings.includes(item.id)));
 
         toast("Deleting listings...");
@@ -36,15 +34,13 @@ export function DeleteMultiple({ selectedListings, setSelectedListings, setItems
             toast.success("Listings deleted successfully");
         } catch (error) {
             toast.error("Error deleting listings. Please try again.");
-            // Revert the UI if it fails
             setDeleting(false);
             setDeletingIds([]);
-            setSelectedListings(selectedListings); // Restore the selected listings
+            setSelectedListings(selectedListings);
 
-            // Restore the deleted items in case of failure
             setItems((prevItems) => [
                 ...prevItems,
-                ...selectedListings.map(id => ({ id })) // Assuming you have access to the full listings data
+                ...selectedListings.map(id => ({ id }))
             ]);
         }
     };
@@ -52,7 +48,7 @@ export function DeleteMultiple({ selectedListings, setSelectedListings, setItems
     return (
         <button
             onClick={deleteSelected}
-            disabled={selectedListings.length === 0} // Disable the button while deleting
+            disabled={selectedListings.length === 0}
             className="m-2 p-2 bg-red-500 text-white rounded disabled:opacity-50"
         >
             Delete Selected

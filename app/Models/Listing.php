@@ -16,7 +16,8 @@ class Listing extends Model
         'description',
         'user_id',
         'estimate',
-        'consignor'
+        'consignor',
+        'position'
     ];
 
     public function user()
