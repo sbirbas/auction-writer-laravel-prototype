@@ -27,7 +27,7 @@ export function DuplicateListings({ selectedListings }: DuplicateListingsProps) 
                 listingIds: selectedListings,
             });
 
-            toast.success("Successfully duplicated lots!"); p
+            toast.success("Successfully duplicated lots!");
         } catch (error) {
             toast.error("Error duplicating listings. Please try again.");
             // Revert the UI if it fails
