@@ -26,8 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('listing', ListingController::class)->only(['store', 'update', 'destroy']);
-    Route::post('/listing}', [ListingController::class, 'duplicate'])->name('listing.duplicate');
-    Route::post('/listing/duplicate-multiple', action: [ListingController::class, 'duplicateMultiple'])->name('listing.duplicateMultiple');
+    Route::post('/listing/duplicate-multiple', action: [ListingController::class, 'duplicate'])->name('listing.duplicateMultiple');
     Route::post('/listing/reorder', [ListingController::class, 'reorder'])->name('listing.reorder');
     Route::post('/listing/delete-multiple', [ListingController::class, 'deleteMultiple']);
 });

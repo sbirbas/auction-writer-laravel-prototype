@@ -43,7 +43,6 @@ export default function ListingIndex() {
             setSelectedListings(listings.map((listing) => listing.id));
         }
     };
-
     const toggleSelection = (listingId: number) => {
         setSelectedListings((prevSelected) =>
             prevSelected.includes(listingId)
@@ -71,13 +70,13 @@ export default function ListingIndex() {
             position: index,
         }));
         router.post("/listing/reorder", { items: newItems })
-        .then(response => {
-            console.log(response); // Check the response
-        })
-        .catch((error) => {
-            console.error("Reorder failed", error);
-            // If a redirect is happening, check the URL in error
-        });
+            .then(response => {
+                console.log(response); // Check the response
+            })
+            .catch((error) => {
+                console.error("Reorder failed", error);
+                // If a redirect is happening, check the URL in error
+            });
 
     };
 
@@ -93,8 +92,16 @@ export default function ListingIndex() {
                         <h2 className="text-xl font-semibold mt-2">Total Estimated Value: ${estimatedTotal}</h2>
                         <div className="mt-4">
                             <CreateListing />
-                            <DeleteMultiple selectedListings={selectedListings} />
-                            <DuplicateListings selectedListings={selectedListings} />
+                            <DeleteMultiple
+                                selectedListings={selectedListings}
+                                setSelectedListings={setSelectedListings}
+                                setItems={setItems}
+                            />
+                            <DuplicateListings
+                                selectedListings={selectedListings}
+                                setSelectedListings={setSelectedListings}
+                                setItems={setItems}
+                            />
                         </div>
                     </div>
                 </div>
@@ -130,6 +137,7 @@ export default function ListingIndex() {
                                             item={listing}
                                             selectedListings={selectedListings}
                                             toggleSelection={toggleSelection}
+                                            setItems={setItems}
                                         />
                                     ))}
                                 </TableBody>

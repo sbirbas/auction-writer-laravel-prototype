@@ -21,7 +21,6 @@ interface EditListingProps {
     title: string;
     description: string;
     estimate: string;
-    sale_order: string;
     consignor: string;
   };
 }
@@ -89,7 +88,7 @@ export function EditListing({ listing }: EditListingProps) {
           <DialogDescription>Update the details and save changes.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 py-4">
-          {["lot", "title", "description", "estimate", "sale_order", "consignor"].map((field) => (
+          {["lot", "title", "description", "estimate", "consignor"].map((field) => (
             <div key={field} className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor={field} className="text-right capitalize">
                 {field.replace("_", " ")}

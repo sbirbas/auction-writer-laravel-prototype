@@ -14,24 +14,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export function DeleteListing({ data, onDelete }) {
+export function DeleteListing({ data }) {
     const { delete: destroy } = useForm();
     const [isDeleting, setIsDeleting] = useState(false);
 
     function handleDelete() {
         console.log("Deleting listing:", data);
+
         if (!data || !data.id) {
             console.error("Listing ID is missing!");
+            toast.error("Listing ID is missing!");
             return;
         }
 
-        // Optimistic UI update: update the state before the request completes
         setIsDeleting(true);
-
-        // Optimistically remove the listing from the list (or adjust UI state)
-        if (onDelete) {
-            onDelete(data.id); // Assume `onDelete` will remove the listing from the list in the parent component
-        }
 
         // Make the actual delete request
         destroy(`/listing/${data.id}`)
@@ -40,12 +36,10 @@ export function DeleteListing({ data, onDelete }) {
                 toast.success("Listing deleted successfully");
             })
             .catch((error) => {
-                // On failure, revert the optimistic update and show an error message
+                // On failure, revert the update and show an error message
+                console.error("Error deleting listing:", error);
                 setIsDeleting(false);
                 toast.error("Failed to delete the listing. Please try again.");
-                if (onDelete) {
-                    onDelete(data.id, true); // Revert removal of the listing if deletion failed
-                }
             });
     }
 

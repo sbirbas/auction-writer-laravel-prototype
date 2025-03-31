@@ -20,7 +20,7 @@ export function ListingDropdown({data}) {
                 <DropdownMenuSeparator></DropdownMenuSeparator>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}><DuplicateListings selectedListings={[data.id]}/></DropdownMenuItem>
                 <DropdownMenuSeparator></DropdownMenuSeparator>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}><DeleteListing data={data}/></DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}><DeleteListing data={data} /></DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

@@ -40,16 +40,7 @@ class ListingController extends Controller
         $listing->update($validatedData);
     }
 
-    public function duplicate($id)
-    {
-        $originalListing = Listing::findOrFail($id);
-
-        $newListing = $originalListing->replicate();
-        $newListing->created_at = Carbon::now();
-        $newListing->save();
-    }
-
-    public function duplicateMultiple(Request $request)
+    public function duplicate(Request $request)
     {
         $listingIds = $request->input('listingIds', []);
 
@@ -58,6 +49,8 @@ class ListingController extends Controller
             //duplicating with the eloquent replicate() method
             $newListing = $originalListing->replicate();
             $newListing->created_at = Carbon::now();
+            //this is to prevent 2 rows from having the same position on duplication
+            $newListing->position = Listing::max('position') + 1;
 
             $newListing->save();
         }
