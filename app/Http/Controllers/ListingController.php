@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Listing;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB as FacadesDB;
 
 class ListingController extends Controller
 {
-
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -46,10 +45,10 @@ class ListingController extends Controller
 
         foreach ($listingIds as $id) {
             $originalListing = Listing::findOrFail($id);
-            //duplicating with the eloquent replicate() method
+            // duplicating with the eloquent replicate() method
             $newListing = $originalListing->replicate();
             $newListing->created_at = Carbon::now();
-            //this is to prevent 2 rows from having the same position on duplication
+            // this is to prevent 2 rows from having the same position on duplication
             $newListing->position = Listing::max('position') + 1;
 
             $newListing->save();

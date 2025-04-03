@@ -48,3 +48,9 @@ jobs:
 
       - name: Tests
         run: ./vendor/bin/phpunit
+
+      - name: Run Laravel Pint
+        run: vendor/bin/pint --test
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyze --memory-limit=528M

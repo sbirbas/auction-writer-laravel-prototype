@@ -30,5 +30,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/listing/reorder', [ListingController::class, 'reorder'])->name('listing.reorder');
     Route::post('/listing/delete-multiple', [ListingController::class, 'deleteMultiple']);
 });
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

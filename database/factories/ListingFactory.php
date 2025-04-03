@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +21,7 @@ class ListingFactory extends Factory
             'description' => fake()->paragraph(),
             'user_id' => 1,
             'lot' => fake()->randomNumber(5),
-            'estimate' => fake()->numberBetween(1,20),
+            'estimate' => fake()->numberBetween(1, 20),
             'consignor' => fake()->randomNumber(5),
         ];
     }
