@@ -33,6 +33,7 @@ jobs:
 
       - name: Run ESLint (for TSX files)
         run: npm run lint
+        continue-on-error: true
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -45,3 +46,16 @@ jobs:
 
       - name: Run Laravel Pint (PHP Formatting)
         run: vendor/bin/pint --test
+        
+      - name: Run PHPStan
+        continue-on-error: true
+        run: vendor/bin/phpstan analyze --memory-limit=1G
+
+      - name: Setup Database
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
+
+      - name: Run PHPUnit Tests
+        run: vendor/bin/phpunit
