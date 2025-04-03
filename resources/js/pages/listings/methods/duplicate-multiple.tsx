@@ -1,6 +1,6 @@
-import { router } from "@inertiajs/react";
-import { toast } from "sonner";
-import { useState } from "react";
+import { router } from '@inertiajs/react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface DuplicateListingsProps {
     selectedListings: number[];
@@ -13,23 +13,23 @@ export function DuplicateListings({ selectedListings }: DuplicateListingsProps) 
 
     const duplicateSelected = async () => {
         if (selectedListings.length === 0) {
-            toast.error("Please select at least one listing to duplicate.");
+            toast.error('Please select at least one listing to duplicate.');
             return;
         }
 
         setDuplicating(true);
         setDuplicatingIds(selectedListings);
 
-        toast("Duplicating listings...");
+        toast('Duplicating listings...');
 
         try {
-            await router.post("/listing/duplicate-multiple", {
+            await router.post('/listing/duplicate-multiple', {
                 listingIds: selectedListings,
             });
 
-            toast.success("Successfully duplicated lots!");
+            toast.success('Successfully duplicated lots!');
         } catch (error) {
-            toast.error("Error duplicating listings. Please try again.");
+            toast.error('Error duplicating listings. Please try again.');
             // Revert the UI if it fails
             setDuplicating(false);
             setDuplicatingIds([]);
@@ -40,7 +40,7 @@ export function DuplicateListings({ selectedListings }: DuplicateListingsProps) 
         <button
             onClick={duplicateSelected}
             hidden={selectedListings.length === 0} // Disable the button while duplicating
-            className="m-2 p-2 bg-red-500 text-white rounded"
+            className='m-2 rounded bg-red-500 p-2 text-white'
         >
             Duplicate
         </button>

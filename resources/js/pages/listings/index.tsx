@@ -1,32 +1,13 @@
-import AppLayout from "@/layouts/app-layout";
-import { Head, usePage } from "@inertiajs/react";
-import { CreateListing } from "./methods/create";
-import { DuplicateListings } from "./methods/duplicate-multiple";
-import { DeleteMultiple } from "./methods/delete-multiple";
-import { router } from "@inertiajs/react";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import React, { useState } from "react";
-import {
-    DndContext,
-    closestCenter,
-    useSensor,
-    useSensors,
-    PointerSensor,
-} from "@dnd-kit/core";
-import {
-    SortableContext,
-    verticalListSortingStrategy,
-    arrayMove,
-} from "@dnd-kit/sortable";
-import SortableRow from "./sortable-row";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Head, router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
+import { CreateListing } from './methods/create';
+import { DeleteMultiple } from './methods/delete-multiple';
+import { DuplicateListings } from './methods/duplicate-multiple';
+import SortableRow from './sortable-row';
 
 export default function ListingIndex() {
     const { listings } = usePage().props;
@@ -45,9 +26,7 @@ export default function ListingIndex() {
     };
     const toggleSelection = (listingId: number) => {
         setSelectedListings((prevSelected) =>
-            prevSelected.includes(listingId)
-                ? prevSelected.filter((id) => id !== listingId)
-                : [...prevSelected, listingId]
+            prevSelected.includes(listingId) ? prevSelected.filter((id) => id !== listingId) : [...prevSelected, listingId],
         );
     };
 
@@ -56,8 +35,8 @@ export default function ListingIndex() {
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
-//checks if the target is different from the dragged item, and find the new indices
-//and if they are valid, moves item
+        //checks if the target is different from the dragged item, and find the new indices
+        //and if they are valid, moves item
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
 
@@ -70,57 +49,45 @@ export default function ListingIndex() {
             id: item.id,
             position: index,
         }));
-        router.post("/listing/reorder", { items: newItems })
-            .then(response => {
-                console.log(response);
-            })
+        router.post('/listing/reorder', { items: newItems }).then((response) => {
+            console.log(response);
+        });
     };
 
     return (
-        <AppLayout breadcrumbs={[{ title: "Listings", href: "/listings" }]}>
-            <Head title="Dashboard" />
-            <div className="flex flex-col gap-4 p-4">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border">
-                        <h2 className="text-xl font-semibold">Total Lots: {recordCount}</h2>
-                        <h2 className="text-xl font-semibold mt-2">Total Estimated Value: ${estimatedTotal}</h2>
-                        <div className="mt-4">
+        <AppLayout breadcrumbs={[{ title: 'Listings', href: '/listings' }]}>
+            <Head title='Dashboard' />
+            <div className='flex flex-col gap-4 p-4'>
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+                    <div className='rounded-xl border bg-white p-6 shadow-lg dark:bg-gray-800'>
+                        <h2 className='text-xl font-semibold'>Total Lots: {recordCount}</h2>
+                        <h2 className='mt-2 text-xl font-semibold'>Total Estimated Value: ${estimatedTotal}</h2>
+                        <div className='mt-4'>
                             <CreateListing />
-                            <DeleteMultiple
-                                selectedListings={selectedListings}
-                                setSelectedListings={setSelectedListings}
-                                setItems={setItems}
-                            />
-                            <DuplicateListings
-                                selectedListings={selectedListings}
-                                setItems={setItems}
-                            />
+                            <DeleteMultiple selectedListings={selectedListings} setSelectedListings={setSelectedListings} setItems={setItems} />
+                            <DuplicateListings selectedListings={selectedListings} setItems={setItems} />
                         </div>
                     </div>
                 </div>
 
-                <div className="border rounded-xl overflow-hidden">
+                <div className='overflow-hidden rounded-xl border'>
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
-                            <Table className="max-w-[1000px] w-full mx-auto">
+                            <Table className='mx-auto w-full max-w-[1000px]'>
                                 <TableCaption>A list of your recent listings.</TableCaption>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead></TableHead>
                                         <TableHead>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedListings.length === listings.length}
-                                                onChange={toggleSelectAll}
-                                            />
+                                            <input type='checkbox' checked={selectedListings.length === listings.length} onChange={toggleSelectAll} />
                                         </TableHead>
-                                        <TableHead className="text-center">Sale Order</TableHead>
-                                        <TableHead className="text-center">Lot #</TableHead>
-                                        <TableHead className="text-center w-[auto] sm:w-[150px] md:w-[200px]">Title</TableHead>
-                                        <TableHead className="text-center w-[auto] sm:w-[150px] md:w-[250px]">Description</TableHead>
-                                        <TableHead className="text-center">Estimate</TableHead>
-                                        <TableHead className="text-center">Consignor</TableHead>
-                                        <TableHead className="text-center">Actions</TableHead>
+                                        <TableHead className='text-center'>Sale Order</TableHead>
+                                        <TableHead className='text-center'>Lot #</TableHead>
+                                        <TableHead className='w-[auto] text-center sm:w-[150px] md:w-[200px]'>Title</TableHead>
+                                        <TableHead className='w-[auto] text-center sm:w-[150px] md:w-[250px]'>Description</TableHead>
+                                        <TableHead className='text-center'>Estimate</TableHead>
+                                        <TableHead className='text-center'>Consignor</TableHead>
+                                        <TableHead className='text-center'>Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -135,7 +102,6 @@ export default function ListingIndex() {
                                     ))}
                                 </TableBody>
                             </Table>
-
                         </SortableContext>
                     </DndContext>
                 </div>

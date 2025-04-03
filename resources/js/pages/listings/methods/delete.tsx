@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useForm } from "@inertiajs/react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,20 +8,22 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export function DeleteListing({ data }) {
     const { delete: destroy } = useForm();
     const [isDeleting, setIsDeleting] = useState(false);
 
     function handleDelete() {
-        console.log("Deleting listing:", data);
+        console.log('Deleting listing:', data);
 
         if (!data || !data.id) {
-            console.error("Listing ID is missing!");
-            toast.error("Listing ID is missing!");
+            console.error('Listing ID is missing!');
+            toast.error('Listing ID is missing!');
             return;
         }
 
@@ -33,29 +33,27 @@ export function DeleteListing({ data }) {
         destroy(`/listing/${data.id}`)
             .then(() => {
                 // On success, show a toast message
-                toast.success("Listing deleted successfully");
+                toast.success('Listing deleted successfully');
             })
             .catch((error) => {
                 // On failure, revert the update and show an error message
-                console.error("Error deleting listing:", error);
+                console.error('Error deleting listing:', error);
                 setIsDeleting(false);
-                toast.error("Failed to delete the listing. Please try again.");
+                toast.error('Failed to delete the listing. Please try again.');
             });
     }
 
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={isDeleting}>
+                <Button variant='destructive' disabled={isDeleting}>
                     Delete Lot
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your listing.
-                    </AlertDialogDescription>
+                    <AlertDialogDescription>This action cannot be undone. This will permanently delete your listing.</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>

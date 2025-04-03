@@ -1,6 +1,6 @@
-import { router } from "@inertiajs/react";
-import { toast } from "sonner";
-import { useState } from "react";
+import { router } from '@inertiajs/react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface DeleteListingsProps {
     selectedListings: number[];
@@ -14,7 +14,7 @@ export function DeleteMultiple({ selectedListings, setSelectedListings, setItems
 
     const deleteSelected = async () => {
         if (selectedListings.length === 0) {
-            alert("Please select at least one listing to delete.");
+            alert('Please select at least one listing to delete.');
             return;
         }
 
@@ -24,24 +24,21 @@ export function DeleteMultiple({ selectedListings, setSelectedListings, setItems
 
         setItems((prevItems) => prevItems.filter((item) => !selectedListings.includes(item.id)));
 
-        toast("Deleting listings...");
+        toast('Deleting listings...');
 
         try {
-            await router.post("/listing/delete-multiple", {
+            await router.post('/listing/delete-multiple', {
                 listingIds: selectedListings,
             });
 
-            toast.success("Listings deleted successfully");
+            toast.success('Listings deleted successfully');
         } catch (error) {
-            toast.error("Error deleting listings. Please try again.");
+            toast.error('Error deleting listings. Please try again.');
             setDeleting(false);
             setDeletingIds([]);
             setSelectedListings(selectedListings);
 
-            setItems((prevItems) => [
-                ...prevItems,
-                ...selectedListings.map(id => ({ id }))
-            ]);
+            setItems((prevItems) => [...prevItems, ...selectedListings.map((id) => ({ id }))]);
         }
     };
 
@@ -49,7 +46,7 @@ export function DeleteMultiple({ selectedListings, setSelectedListings, setItems
         <button
             onClick={deleteSelected}
             disabled={selectedListings.length === 0}
-            className="m-2 p-2 bg-red-500 text-white rounded disabled:opacity-50"
+            className='m-2 rounded bg-red-500 p-2 text-white disabled:opacity-50'
         >
             Delete Selected
         </button>
