@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Listing;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ListingsIndexController extends Controller
 {
-    //this is just for passing the listing model to all the views.
+    // this is just for passing the listing model to all the views.
     protected function getUserListings()
     {
         $user = auth()->user();
+
         return [
             'user' => $user,
-            'listings' => Listing::where('user_id', $user->id)->get()
+            'listings' => Listing::where('user_id', $user->id)->get(),
         ];
     }
 
@@ -32,6 +32,7 @@ class ListingsIndexController extends Controller
     {
         return Inertia::render('listings/edit', $this->getUserListings());
     }
+
     public function duplicate()
     {
         return Inertia::render('listings/duplicate', $this->getUserListings());

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Listing;
+use Illuminate\Database\Seeder;
 
 class ListingSeeder extends Seeder
 {
@@ -16,4 +16,3 @@ class ListingSeeder extends Seeder
         Listing::factory()->count(10)->create();
     }
 }
-

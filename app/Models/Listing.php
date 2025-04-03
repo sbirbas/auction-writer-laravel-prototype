@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Listing extends Model
 {
     use HasFactory;
+
     protected $table = 'listings';
 
     protected $fillable = [
@@ -17,7 +18,7 @@ class Listing extends Model
         'user_id',
         'estimate',
         'consignor',
-        'position'
+        'position',
     ];
 
     public function user()
